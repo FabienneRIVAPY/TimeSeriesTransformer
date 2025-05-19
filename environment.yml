@@ -1,0 +1,15 @@
+name: TFT_env
+
+channels:
+    - conda-forge
+    - defaults
+    - pytorch
+
+dependencies:
+    - python==3.13.2
+    - pip
+    # jupyter for notebook support
+    - jupyter 
+    - pytorch>=1.7
+    - pytorch-forecasting
+    - pytorch-lightning

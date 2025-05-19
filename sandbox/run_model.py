@@ -5,26 +5,21 @@ sys.path.append(
 )
 import numpy as np
 import pandas as pd
+
 from pytorch_forecasting import TimeSeriesDataSet
 from pytorch_forecasting import GroupNormalizer
 from pytorch_forecasting import TemporalFusionTransformer, QuantileLoss
 from lightning.pytorch import Trainer
 from lightning.pytorch.callbacks.early_stopping import EarlyStopping
 from lightning.pytorch.callbacks import LearningRateMonitor
-from lightning.pytorch.loggers import TensorBoardLogger
-import lightning.pytorch as pl
-from lightning.pytorch.tuner import Tuner
+
 from src.preprocess_data import *
+from src.postprocess_model import *
 import params
 import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
-
-# ------------------------------------------------------------------
-# parameters
-# ------------------------------------------------------------------
-print(params.file_path)
 
 # ------------------------------------------------------------------
 # load and preprocess data
@@ -69,48 +64,6 @@ val_dataloader = validation.to_dataloader(
 )
 print("done")
 
-
-# ------------------------------------------------------------------
-# find optimal learning rate
-# ------------------------------------------------------------------
-# # configure network and trainer
-# pl.seed_everything(42)
-# trainer = Trainer(
-#     accelerator="cpu",
-#     # clipping gradients is a hyperparameter and important to prevent divergence
-#     # of the gradient for recurrent neural networks
-#     gradient_clip_val=0.1,
-# )
-
-# tft = TemporalFusionTransformer.from_dataset(
-#     training,
-#     # not meaningful for finding the learning rate but otherwise very important
-#     learning_rate=0.03,
-#     hidden_size=8,  # most important hyperparameter apart from learning rate
-#     # number of attention heads. Set to up to 4 for large datasets
-#     attention_head_size=1,
-#     dropout=0.1,  # between 0.1 and 0.3 are good values
-#     hidden_continuous_size=8,  # set to <= hidden_size
-#     loss=QuantileLoss(),
-#     optimizer="ranger",
-#     # reduce learning rate if no improvement in validation loss after x epochs
-#     # reduce_on_plateau_patience=1000,
-# )
-# print(f"Number of parameters in network: {tft.size() / 1e3:.1f}k")
-
-
-# res = Tuner(trainer).lr_find(
-#     tft,
-#     train_dataloaders=train_dataloader,
-#     val_dataloaders=val_dataloader,
-#     max_lr=10.0,
-#     min_lr=1e-6,
-# )
-
-# print(f"suggested learning rate: {res.suggestion()}")
-# fig = res.plot(show=True, suggest=True)
-# fig.savefig("optimalLR.png")
-
 # ------------------------------------------------------------------
 # train model
 # ------------------------------------------------------------------
@@ -150,7 +103,6 @@ tft = TemporalFusionTransformer.from_dataset(
 trainer.fit(tft, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 print("done")
 
-
 # ------------------------------------------------------------------
 # load and save the model
 # ------------------------------------------------------------------
@@ -158,4 +110,5 @@ print("load and save the model...")
 best_model_path = trainer.checkpoint_callback.best_model_path
 print(best_model_path)
 best_tft = TemporalFusionTransformer.load_from_checkpoint(best_model_path)
+save_path_to_file(best_model_path, "best_tft_path.txt")
 print("done")
