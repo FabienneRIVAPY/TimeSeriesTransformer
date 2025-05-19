@@ -1,0 +1,5 @@
+embeddings {
+  tensor_name: "latlon:00005"
+  metadata_path: "00005/latlon\\metadata.tsv"
+  tensor_path: "00005/latlon\\tensors.tsv"
+}
