@@ -38,6 +38,7 @@ time_varying_unknown_reals = [
     "Forecasted Generation DA Photovoltaics and wind [MWh]",
     "Forecasted Generation DA Other [MWh]",
     "Generation Forecast ID Photovoltaics and wind [MWh]",
+    "GWL",
 ]
 add_relative_time_idx = True
 add_target_scales = True
