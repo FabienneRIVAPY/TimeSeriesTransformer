@@ -54,7 +54,7 @@ training = TimeSeriesDataSet(
     static_categoricals=params.static_categoricals,
     time_varying_known_reals=params.time_varying_known_reals,
     time_varying_unknown_reals=params.time_varying_unknown_reals,
-    target_normalizer=GroupNormalizer(transformation=None),
+    target_normalizer=GroupNormalizer(groups=["zone"], transformation="softplus"),
     add_relative_time_idx=params.add_relative_time_idx,
     add_target_scales=params.add_target_scales,
     add_encoder_length=params.add_encoder_length,
