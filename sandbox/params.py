@@ -1,7 +1,7 @@
 # -------------------------------------------------------------------
 # file path
 # -------------------------------------------------------------------
-file_path = "../data/DAprices_201810010000_202505140000_hourly.csv"
+file_path = "dataframe.csv"
 
 # -------------------------------------------------------------------
 # TimeSeriesDataSet
@@ -10,18 +10,35 @@ max_prediction_length = 24
 max_encoder_length = 7 * 24
 
 time_idx = "hours_from_start"
-target = "DAprices"
+target = "Dayahead Prices Germany/Luxembourg"
 group_ids = ["zone"]
 min_prediction_length = 1
 static_categoricals = ["zone"]
 time_varying_known_reals = [
     "hours_from_start",
-    "day",
     "day_of_week",
     "month",
     "hour",
+    "is_holiday_or_weekend",
 ]
-time_varying_unknown_reals = ["DAprices"]
+time_varying_unknown_reals = [
+    "Actual consumption Grid load [MWh]",
+    "Actual consumption Residual load [MWh]",
+    "Actual Generation Wind offshore [MWh]",
+    "Actual Generation Wind onshore [MWh]",
+    "Actual Generation Photovoltaics [MWh]",
+    "Actual Generation Nuclear [MWh]",
+    "Actual Generation Lignite [MWh]",
+    "Actual Generation Hard coal [MWh]",
+    "Actual Generation Fossil gas [MWh]",
+    "Actual Generation Other conventional [MWh]",
+    "Dayahead Prices Germany/Luxembourg",
+    "Forecasted consumption grid load [MWh]",
+    "Forecasted consumption Residual load [MWh]",
+    "Forecasted Generation DA Photovoltaics and wind [MWh]",
+    "Forecasted Generation DA Other [MWh]",
+    "Generation Forecast ID Photovoltaics and wind [MWh]",
+]
 add_relative_time_idx = True
 add_target_scales = True
 add_encoder_length = True
@@ -32,7 +49,7 @@ add_encoder_length = True
 # -------------------------------------------------------------------
 batch_size = 64
 
-max_epochs = 3
+max_epochs = 1
 accelerator = "cpu"
 devices = 1
 enable_model_summary = True

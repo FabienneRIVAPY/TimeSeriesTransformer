@@ -3,9 +3,8 @@ import sys
 sys.path.append(
     "C:/Users/Anwender/Documents/GitHub/RiVaPy_development/TimeSeriesTransformer/"
 )
-import numpy as np
 import pandas as pd
-
+import numpy as np
 from pytorch_forecasting import TimeSeriesDataSet
 from pytorch_forecasting import GroupNormalizer
 from pytorch_forecasting import TemporalFusionTransformer, QuantileLoss
@@ -13,7 +12,6 @@ from lightning.pytorch import Trainer
 from lightning.pytorch.callbacks.early_stopping import EarlyStopping
 from lightning.pytorch.callbacks import LearningRateMonitor
 
-from src.preprocess_data import *
 from src.postprocess_model import *
 import params
 import warnings
@@ -25,10 +23,20 @@ warnings.filterwarnings("ignore", category=UserWarning)
 # load and preprocess data
 # ------------------------------------------------------------------
 print("load and preprocess data...")
-data = load_and_clean_data(file_path=params.file_path)
-time_df = process_timeseries(data)
+time_df = pd.read_csv(params.file_path, index_col=0, sep=";", decimal=".")
+time_df = time_df.reset_index(drop=True)
+time_df["is_holiday_or_weekend"] = time_df["is_holiday_or_weekend"].replace(
+    {True: 1, False: 0}
+)
+pattern = r"\d{1,2}\.?\s*[A-Za-z]{3}"
+time_df = time_df.replace(pattern, float("nan"), regex=True)
+time_df = time_df.ffill(axis=0)
+time_df["Dayahead Prices Germany/Luxembourg"] = time_df[
+    "Dayahead Prices Germany/Luxembourg"
+].astype("float")
 training_cutoff = time_df[params.time_idx].max() - params.max_prediction_length
 print("done")
+
 
 # ------------------------------------------------------------------
 # create dataloaders
@@ -50,6 +58,7 @@ training = TimeSeriesDataSet(
     add_relative_time_idx=params.add_relative_time_idx,
     add_target_scales=params.add_target_scales,
     add_encoder_length=params.add_encoder_length,
+    allow_missing_timesteps=True,
 )
 validation = TimeSeriesDataSet.from_dataset(
     training, time_df, predict=True, stop_randomization=True
