@@ -99,9 +99,9 @@ def process_timeseries(
 
     time_df = pd.concat(df_list).reset_index(drop=True)
     # Apply final filtering
-    time_df = tmp[
-        (tmp["days_from_start"] >= time_window[0])
-        & (tmp["days_from_start"] < time_window[1])
-    ].copy()
+    # time_df = tmp[
+    #     (tmp["days_from_start"] >= time_window[0])
+    #     & (tmp["days_from_start"] < time_window[1])
+    # ].copy()
 
     return time_df
