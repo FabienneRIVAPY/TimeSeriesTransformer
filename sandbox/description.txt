@@ -1,3 +1,6 @@
-Empirical study Case 1:
+## Empirical study Case 1:
 
-- Forecasting Day-Ahead prices
+- Forecasting Day-Ahead prices (based on generation, demand and weather)
+
+Our data consists of hourly Day ahead prices for Germany/Luxembourg that were saved on a hourly bases from 01/01/2019 until 01/05/2025.
+Then, we will try different architectures for the TFT as well as different sets of parameters and hyper-parameters.
