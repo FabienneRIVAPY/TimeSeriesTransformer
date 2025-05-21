@@ -1,7 +1,8 @@
 import sys
 
 sys.path.append(
-    "C:/Users/Anwender/Documents/GitHub/RiVaPy_development/TimeSeriesTransformer/"
+    #"C:/Users/Anwender/Documents/GitHub/RiVaPy_development/TimeSeriesTransformer/"
+    '/home/doeltz/doeltz/development/TimeSeriesTransformer/'
 )
 import pandas as pd
 import numpy as np
@@ -9,6 +10,7 @@ from pytorch_forecasting import TimeSeriesDataSet
 from pytorch_forecasting import GroupNormalizer
 from pytorch_forecasting import TemporalFusionTransformer, QuantileLoss
 from lightning.pytorch import Trainer
+from lightning.pytorch.loggers import TensorBoardLogger
 from lightning.pytorch.callbacks.early_stopping import EarlyStopping
 from lightning.pytorch.callbacks import LearningRateMonitor
 
@@ -85,7 +87,7 @@ early_stop_callback = EarlyStopping(
     mode=params.mode,
 )
 lr_logger = LearningRateMonitor(logging_interval=params.logging_interval)
-# logger = TensorBoardLogger("lightning_logs")
+logger = TensorBoardLogger("lightning_logs")
 
 trainer = Trainer(
     max_epochs=params.max_epochs,
@@ -94,6 +96,7 @@ trainer = Trainer(
     enable_model_summary=params.enable_model_summary,
     gradient_clip_val=params.gradient_clip_val,
     callbacks=[lr_logger, early_stop_callback],
+    logger=logger,
 )
 
 tft = TemporalFusionTransformer.from_dataset(
