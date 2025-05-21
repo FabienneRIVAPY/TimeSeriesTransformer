@@ -1,0 +1,3 @@
+Empirical study Case 1:
+
+- Forecasting Day-Ahead prices
