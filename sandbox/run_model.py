@@ -1,8 +1,8 @@
 import sys
 
 sys.path.append(
-    #"C:/Users/Anwender/Documents/GitHub/RiVaPy_development/TimeSeriesTransformer/"
-    '/home/doeltz/doeltz/development/TimeSeriesTransformer/'
+    # "C:/Users/Anwender/Documents/GitHub/RiVaPy_development/TimeSeriesTransformer/"
+    "/home/doeltz/doeltz/development/TimeSeriesTransformer/"
 )
 import pandas as pd
 import numpy as np
@@ -13,6 +13,7 @@ from lightning.pytorch import Trainer
 from lightning.pytorch.loggers import TensorBoardLogger
 from lightning.pytorch.callbacks.early_stopping import EarlyStopping
 from lightning.pytorch.callbacks import LearningRateMonitor
+import torch
 
 from src.postprocess_model import *
 import params
@@ -122,5 +123,7 @@ print("load and save the model...")
 best_model_path = trainer.checkpoint_callback.best_model_path
 print(best_model_path)
 best_tft = TemporalFusionTransformer.load_from_checkpoint(best_model_path)
+best_tft.cpu()
+torch.save(best_tft.state_dict(), "best_tft_cpu.pt")
 save_path_to_file(best_model_path, "best_tft_path.txt")
 print("done")

@@ -15,7 +15,7 @@ group_ids = ["zone"]
 min_prediction_length = 1
 static_categoricals = ["zone"]
 time_varying_known_reals = [
-    #"hours_from_start",
+    # "hours_from_start",
     "year",
     "day_of_week",
     "month",
@@ -51,16 +51,16 @@ add_encoder_length = True
 batch_size = 64
 
 max_epochs = 50
-accelerator = "gpu"#"cpu"
+accelerator = "gpu"  # "cpu"
 devices = 1
 enable_model_summary = True
 gradient_clip_val = 0.1
 
 learning_rate = 0.001
-hidden_size = 20 #160
-attention_head_size = 1#4
+hidden_size = 20  # 160
+attention_head_size = 1  # 4
 dropout = 0.1
-hidden_continuous_size = 20#160
+hidden_continuous_size = 20  # 160
 output_size = (
     7  # there are 7 quantiles by default: [0.02, 0.1, 0.25, 0.5, 0.75, 0.9, 0.98]
 )
