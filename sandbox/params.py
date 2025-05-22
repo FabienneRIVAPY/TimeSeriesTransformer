@@ -10,7 +10,7 @@ max_prediction_length = 24
 max_encoder_length = 7 * 24
 
 time_idx = "hours_from_start"
-target = "DAprices"
+target = "Day Ahead Preise D_LU"
 group_ids = ["zone"]
 min_prediction_length = 1
 static_categoricals = ["zone"]
@@ -21,24 +21,14 @@ time_varying_known_reals = [
     "month",
     "hour",
     "is_holiday_or_weekend",
+    "Prognostizierte Erzeugung PV und Wind",
 ]
 time_varying_unknown_reals = [
-    # "Actual consumption Grid load [MWh]",
-    # "Actual consumption Residual load [MWh]",
-    # "Actual Generation Wind offshore [MWh]",
-    # "Actual Generation Wind onshore [MWh]",
-    # "Actual Generation Photovoltaics [MWh]",
-    # "Actual Generation Nuclear [MWh]",
-    # "Actual Generation Lignite [MWh]",
-    # "Actual Generation Hard coal [MWh]",
-    # "Actual Generation Fossil gas [MWh]",
-    # "Actual Generation Other conventional [MWh]",
-    "DAprices",
-    # "Forecasted consumption grid load [MWh]",
-    # "Forecasted consumption Residual load [MWh]",
-    # "Forecasted Generation DA Photovoltaics and wind [MWh]",
-    # "Forecasted Generation DA Other [MWh]",
-    # "GWL",
+    "Day Ahead Preise D_LU",
+    "Erzeugung Erneuerbare",
+    "Erzeugung Konventionelle",
+    "Residuallast",
+    "GWL",
 ]
 add_relative_time_idx = True
 add_target_scales = True

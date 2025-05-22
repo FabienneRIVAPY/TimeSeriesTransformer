@@ -1,8 +1,8 @@
 import sys
 
 sys.path.append(
-    # "C:/Users/Anwender/Documents/GitHub/RiVaPy_development/TimeSeriesTransformer/"
-    "/home/doeltz/doeltz/development/TimeSeriesTransformer/"
+    "C:/Users/Anwender/Documents/GitHub/RiVaPy_development/TimeSeriesTransformer/"
+    # "/home/doeltz/doeltz/development/TimeSeriesTransformer/"
 )
 import pandas as pd
 import numpy as np
@@ -22,6 +22,13 @@ import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
+
+def convert_decimal(x):
+    """Convert string to float, handling both . and , as decimal separators"""
+    x = str(x).replace(",", ".")
+    return float(x)
+
+
 # ------------------------------------------------------------------
 # load and preprocess data
 # ------------------------------------------------------------------
@@ -31,8 +38,18 @@ data = pd.read_csv(
     index_col=0,
     sep=";",
     decimal=",",
+    # converters={"GWL": convert_decimal},  # Replace with your column name
 )
+data["Prognostizierte Erzeugung PV und Wind"] = data[
+    "Prognostizierte Erzeugung PV und Wind"
+].str.replace(",", ".")
+data["Erzeugung Erneuerbare"] = data["Erzeugung Erneuerbare"].str.replace(",", ".")
+data["Erzeugung Konventionelle"] = data["Erzeugung Konventionelle"].str.replace(
+    ",", "."
+)
+data["Residuallast"] = data["Residuallast"].str.replace(",", ".")
 time_df = preprocess_input_data(data)
+
 
 # GWL = pd.read_excel("../data/GWL.xlsx")
 # GWL["month"] = GWL["year"].astype("str")
@@ -79,7 +96,7 @@ training = TimeSeriesDataSet(
     add_relative_time_idx=params.add_relative_time_idx,
     add_target_scales=params.add_target_scales,
     add_encoder_length=params.add_encoder_length,
-    # allow_missing_timesteps=True,
+    allow_missing_timesteps=True,
 )
 validation = TimeSeriesDataSet.from_dataset(
     training, time_df, predict=True, stop_randomization=True

@@ -44,24 +44,25 @@ def preprocess_input_data(data):
     data.sort_index(inplace=True)
     data.replace(0.0, np.nan)
     df_list = []
-    data = data.resample("1h").mean().replace(0.0, np.nan)
+    # data = data.resample("1h").mean().replace(0.0, np.nan)
     earliest_time = data.index.min()
-    data = data[["Deutschland/Luxemburg [€/MWh] Originalauflösungen"]]
+    # data = data[["Day Ahead Preise D_LU"]]
     # Forward fill missing values
     data = data.ffill()
-
     # Handle remaining infinite values
+    data = data.replace("-", np.nan)
+    data = data.replace("#VALUE!", np.nan)
     data = data.replace([np.inf, -np.inf], np.nan)
     data = data.ffill()
 
-    ts = data["Deutschland/Luxemburg [€/MWh] Originalauflösungen"]
+    ts = data[["Day Ahead Preise D_LU"]]
 
     start_date = min(ts.fillna(method="ffill").dropna().index)
     end_date = max(ts.fillna(method="bfill").dropna().index)
 
-    tmp = pd.DataFrame(
-        {"DAprices": data["Deutschland/Luxemburg [€/MWh] Originalauflösungen"]}
-    )
+    tmp = data  # pd.DataFrame(
+    # {"DAprices": data["Deutschland/Luxemburg [€/MWh] Originalauflösungen"]}
+    # )
     date = date = tmp.index
 
     active_range = (ts.index >= start_date) & (ts.index <= end_date)
@@ -85,7 +86,6 @@ def preprocess_input_data(data):
     tmp["is_holiday_or_weekend"] = tmp["date"].apply(mark_holidays_and_weekends)
     tmp["GWL"] = 0.0
 
-    #     #stack all time series vertically
     df_list.append(tmp)
 
     time_df = pd.concat(df_list).reset_index(drop=True)
