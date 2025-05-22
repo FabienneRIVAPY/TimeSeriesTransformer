@@ -5,7 +5,6 @@ In this repository, we conduct some experiments for real-world use cases using t
 
 Each sandbox folder should contain:
 
-- Training Dataframe: dataframe.csv
 - Short description of the use case: description.txt
 - Trained/model: lightning_logs and/or model.zip (only locally, not on GitHub)
 - Set of settings and hyperparameters: params.py

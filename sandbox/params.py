@@ -1,7 +1,7 @@
 # -------------------------------------------------------------------
 # file path
 # -------------------------------------------------------------------
-file_path = "dataframe.csv"
+file_path = "../data/DAprices_201810010000_202505140000_hourly.csv"
 
 # -------------------------------------------------------------------
 # TimeSeriesDataSet
@@ -10,12 +10,12 @@ max_prediction_length = 24
 max_encoder_length = 7 * 24
 
 time_idx = "hours_from_start"
-target = "Dayahead Prices Germany/Luxembourg"
+target = "DAprices"
 group_ids = ["zone"]
 min_prediction_length = 1
 static_categoricals = ["zone"]
 time_varying_known_reals = [
-    # "hours_from_start",
+    "hours_from_start",
     "year",
     "day_of_week",
     "month",
@@ -33,7 +33,7 @@ time_varying_unknown_reals = [
     # "Actual Generation Hard coal [MWh]",
     # "Actual Generation Fossil gas [MWh]",
     # "Actual Generation Other conventional [MWh]",
-    "Dayahead Prices Germany/Luxembourg",
+    "DAprices",
     # "Forecasted consumption grid load [MWh]",
     # "Forecasted consumption Residual load [MWh]",
     # "Forecasted Generation DA Photovoltaics and wind [MWh]",

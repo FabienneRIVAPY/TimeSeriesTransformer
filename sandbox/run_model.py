@@ -1,8 +1,8 @@
 import sys
 
 sys.path.append(
-    # "C:/Users/Anwender/Documents/GitHub/RiVaPy_development/TimeSeriesTransformer/"
-    "/home/doeltz/doeltz/development/TimeSeriesTransformer/"
+    "C:/Users/Anwender/Documents/GitHub/RiVaPy_development/TimeSeriesTransformer/"
+    # "/home/doeltz/doeltz/development/TimeSeriesTransformer/"
 )
 import pandas as pd
 import numpy as np
@@ -14,31 +14,49 @@ from lightning.pytorch.loggers import TensorBoardLogger
 from lightning.pytorch.callbacks.early_stopping import EarlyStopping
 from lightning.pytorch.callbacks import LearningRateMonitor
 import torch
+import matplotlib.pyplot as plt
 
-from src.postprocess_model import *
+from src.model_data_processing import *
 import params
 import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
-
 # ------------------------------------------------------------------
 # load and preprocess data
 # ------------------------------------------------------------------
 print("load and preprocess data...")
-time_df = pd.read_csv(params.file_path, index_col=0, sep=";", decimal=".")
-time_df = time_df.reset_index(drop=True)
-time_df["is_holiday_or_weekend"] = time_df["is_holiday_or_weekend"].replace(
-    {True: 1, False: 0}
+data = pd.read_csv(
+    "../data/DAprices_201810010000_202505140000_hourly.csv",
+    index_col=0,
+    sep=";",
+    decimal=",",
 )
-pattern = r"\d{1,2}\.?\s*[A-Za-z]{3}"
-time_df = time_df.replace(pattern, float("nan"), regex=True)
-time_df = time_df.ffill(axis=0)
-time_df["Dayahead Prices Germany/Luxembourg"] = time_df[
-    "Dayahead Prices Germany/Luxembourg"
-].astype("float")
+time_df = preprocess_input_data(data)
+
+# GWL = pd.read_excel("../data/GWL.xlsx")
+# GWL["month"] = GWL["year"].astype("str")
+# GWL["month"] = GWL["month"].str[:-4]
+# GWL["year"] = GWL["year"].astype("str")
+# GWL["year"] = GWL["year"].str[-4:]
+
+# for ii, row in time_df.iterrows():
+#     y = row["year"]
+#     m = row["month"]
+#     d = row["day"]
+#     i = GWL.index[(GWL["year"].astype("int") == y) & (GWL["month"].astype("int") == m)]
+#     test = GWL[d]
+#     time_df.loc[ii, "GWL"] = test[i].item()
+
 training_cutoff = time_df[params.time_idx].max() - params.max_prediction_length
 print("done")
+
+
+# plt.figure(figsize=[15, 5])
+# plt.plot(time_df["date"], time_df["DAprices"])
+# plt.xlabel("date")
+# plt.ylabel("DA Price [€/MWh]")
+# plt.show()
 
 
 # ------------------------------------------------------------------
@@ -57,11 +75,11 @@ training = TimeSeriesDataSet(
     static_categoricals=params.static_categoricals,
     time_varying_known_reals=params.time_varying_known_reals,
     time_varying_unknown_reals=params.time_varying_unknown_reals,
-    target_normalizer=GroupNormalizer(groups=["zone"], transformation="softplus"),
+    # target_normalizer=GroupNormalizer(groups=["zone"], transformation="softplus"),
     add_relative_time_idx=params.add_relative_time_idx,
     add_target_scales=params.add_target_scales,
     add_encoder_length=params.add_encoder_length,
-    allow_missing_timesteps=True,
+    # allow_missing_timesteps=True,
 )
 validation = TimeSeriesDataSet.from_dataset(
     training, time_df, predict=True, stop_randomization=True
