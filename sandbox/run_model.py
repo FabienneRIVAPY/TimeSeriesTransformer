@@ -80,7 +80,7 @@ training = TimeSeriesDataSet(
     static_categoricals=params.static_categoricals,
     time_varying_known_reals=params.time_varying_known_reals,
     time_varying_unknown_reals=params.time_varying_unknown_reals,
-    # target_normalizer=GroupNormalizer(groups=["zone"], transformation="softplus"),
+    target_normalizer=GroupNormalizer(groups=["zone"]),
     add_relative_time_idx=params.add_relative_time_idx,
     add_target_scales=params.add_target_scales,
     add_encoder_length=params.add_encoder_length,
@@ -89,6 +89,7 @@ training = TimeSeriesDataSet(
 validation = TimeSeriesDataSet.from_dataset(
     training, time_df, predict=True, stop_randomization=True
 )
+
 
 # if you have a strong GPU, feel free to increase the number of workers
 train_dataloader = training.to_dataloader(
