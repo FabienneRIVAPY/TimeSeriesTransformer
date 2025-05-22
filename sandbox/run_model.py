@@ -1,8 +1,8 @@
 import sys
 
 sys.path.append(
-    "C:/Users/Anwender/Documents/GitHub/RiVaPy_development/TimeSeriesTransformer/"
-    # "/home/doeltz/doeltz/development/TimeSeriesTransformer/"
+    # "C:/Users/Anwender/Documents/GitHub/RiVaPy_development/TimeSeriesTransformer/"
+    "/home/doeltz/doeltz/development/TimeSeriesTransformer/"
 )
 import pandas as pd
 import numpy as np
