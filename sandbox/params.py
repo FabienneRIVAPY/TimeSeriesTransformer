@@ -57,10 +57,10 @@ enable_model_summary = True
 gradient_clip_val = 0.1
 
 learning_rate = 0.001
-hidden_size = 20  # 160
+hidden_size = 16  # 160
 attention_head_size = 1  # 4
 dropout = 0.1
-hidden_continuous_size = 20  # 160
+hidden_continuous_size = 16  # 160
 output_size = (
     7  # there are 7 quantiles by default: [0.02, 0.1, 0.25, 0.5, 0.75, 0.9, 0.98]
 )
