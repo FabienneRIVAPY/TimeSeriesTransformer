@@ -16,11 +16,6 @@ min_prediction_length = 1
 static_categoricals = ["zone"]
 time_varying_known_reals = [
     "hours_from_start",
-    "year",
-    "day_of_week",
-    "month",
-    "hour",
-    "is_holiday_or_weekend",
     "Prognostizierte Erzeugung PV und Wind",
 ]
 time_varying_unknown_reals = [
@@ -28,8 +23,15 @@ time_varying_unknown_reals = [
     "Erzeugung Erneuerbare",
     "Erzeugung Konventionelle",
     "Residuallast",
-    "GWL",
 ]
+time_varying_unknown_categoricals = [
+    "year",
+    "day_of_week",
+    "month",
+    "hour",
+    "is_holiday_or_weekend",
+]
+time_varying_known_categoricals = ["GWL"]
 add_relative_time_idx = True
 add_target_scales = True
 add_encoder_length = True
