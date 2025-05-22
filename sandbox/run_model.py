@@ -9,6 +9,7 @@ import numpy as np
 from pytorch_forecasting import TimeSeriesDataSet
 from pytorch_forecasting import GroupNormalizer
 from pytorch_forecasting import TemporalFusionTransformer, QuantileLoss
+import lightning.pytorch as pl
 from lightning.pytorch import Trainer
 from lightning.pytorch.loggers import TensorBoardLogger
 from lightning.pytorch.callbacks.early_stopping import EarlyStopping
@@ -21,12 +22,6 @@ import params
 import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning)
-
-
-def convert_decimal(x):
-    """Convert string to float, handling both . and , as decimal separators"""
-    x = str(x).replace(",", ".")
-    return float(x)
 
 
 # ------------------------------------------------------------------
@@ -67,13 +62,6 @@ time_df = preprocess_input_data(data)
 
 training_cutoff = time_df[params.time_idx].max() - params.max_prediction_length
 print("done")
-
-
-# plt.figure(figsize=[15, 5])
-# plt.plot(time_df["date"], time_df["DAprices"])
-# plt.xlabel("date")
-# plt.ylabel("DA Price [€/MWh]")
-# plt.show()
 
 
 # ------------------------------------------------------------------
@@ -124,6 +112,8 @@ early_stop_callback = EarlyStopping(
 )
 lr_logger = LearningRateMonitor(logging_interval=params.logging_interval)
 logger = TensorBoardLogger("lightning_logs")
+
+pl.seed_everything(42)
 
 trainer = Trainer(
     max_epochs=params.max_epochs,
